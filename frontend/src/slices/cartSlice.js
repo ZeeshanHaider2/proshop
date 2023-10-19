@@ -15,23 +15,22 @@ const cartSlice = createSlice({
      addToCart:(state, action) => {
        const item = action.payload;
 
-       const existItem = state.cartItem.find((x)=> x._id === item._id);
+       const existItem = state.cartItems.find((x)=> x._id === item._id);
 
        if(existItem){
-        state.cartItems = state.cartItems.map((x) => x.Id ===
-        existItem._id ? item : x
-        );
+        state.cartItems = state.cartItems.map((x) => x._Id ===
+        existItem._id ? item : x);
        } else {
-        state.cartItem = [...state.cartItems, item];
+        state.cartItems = [...state.cartItems, item];
        }
        //Calculate item price
-       state.itemPrice = addDecimals(state.cartItems.reduce((acc,item) => acc + item.price * item.qty,0));
+       state.itemsPrice = addDecimals(state.cartItems.reduce((acc,item) => acc + item.price * item.qty,0));
        
-       //calculate shipping price (id order > $100 then free else $10 charges)
-       state.shippingPrice = addDecimals(state.itemPrice > 100 ? 0 : 10);
+       //calculate shipping price (if order > $100 then free else $10 charges)
+       state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 10);
     
        //calculate tax price (15% tax)
-       state.taxPrice = addDecimals(Number((0.15 * state.itemPrice).toFixed(2)));
+       state.taxPrice = addDecimals(Number((0.15 * state.itemsPrice).toFixed(2)));
     
        //Calculate total price
        state.totalPrice = (
