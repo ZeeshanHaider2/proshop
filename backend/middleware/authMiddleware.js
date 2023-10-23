@@ -3,7 +3,7 @@ import asyncHandler from './asyncHandler.js';
 import User from '../models/userModel.js';
 
 // User must be authenticated
-const protect = asyncHandler(async (req, res, next) => {
+const protect = asyncHandler(async(req, res, next) => {
   let token;
 
   // Read JWT from the 'jwt' cookie
