@@ -1,6 +1,6 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Order from '../models/orderModel.js';
-import Product from '../models/productModel.js';
+//import Product from '../models/productModel.js';
 //import { calcPrices } from '../utils/calcPrices.js';
 //import { verifyPayPalPayment, checkIfNewTransaction } from '../utils/paypal.js';
 
@@ -12,7 +12,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
         orderItems,
         shippingAddress,
         paymentMethod,
-        itemPrice,
+        itemsPrice,
         taxPrice,
         shippingPrice,
         totalPrice,
@@ -23,12 +23,12 @@ const addOrderItems = asyncHandler(async (req, res) => {
         throw new Error('No order items');
      } else {
         const order = new Order({
-            orderItems: orderItems.map((x)=({
-                ...x,
-                product: x._id,
-                _id:undefined
+            orderItems: orderItems.map((x)=>({
+            ...x,
+            product: x._id,
+            _id:undefined
             })),
-            users: req.user._id,
+            user: req.user._id,
             shippingAddress,
             paymentMethod,
             itemsPrice,
