@@ -1,9 +1,14 @@
+import { useEffect } from 'react';
 import  { Link, useParams }from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Form, Button, Card, ListGroupItem } from 
 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { useGetOrderDetailsQuery } from '../slices/ordersApiSlice';
+import { useGetOrderDetailsQuery,
+usePayOrderMutation, useGetPaypalClientIdQuery } from '../slices/ordersApiSlice';
 
 
 const OrderScreen = () => {
@@ -15,7 +20,37 @@ const OrderScreen = () => {
            error 
         } = useGetOrderDetailsQuery(orderId);
   
-    return isLoading ? <Loader /> : error ? <Message variant="danger" />
+        const [payOrder, { isLoading:loadingPay}] = usePayOrderMutation();   
+        
+        const [{ isPending }, paypalDispatch ] = usePayPalScriptReducer();
+        
+        const { data: paypal, isLoading: loadingPayPal, error: errorPayPal}=
+        useGetPaypalClientIdQuery();
+
+        const { userInfo } = useSelector((state) => state.auth);
+        
+        useEffect(() => {
+            if (!errorPayPal && !loadingPayPal && paypal.clientId) {
+              const loadPaypalScript = async () => {
+                paypalDispatch({
+                  type: 'resetOptions',
+                  value: {
+                    'client-id': paypal.clientId,
+                    currency: 'USD',
+                  },
+                });
+                paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+              };
+              if (order && !order.isPaid) {
+                if (!window.paypal) {
+                  loadPaypalScript();
+                }
+              }
+            }
+          }, [errorPayPal, loadingPayPal, order, paypal, paypalDispatch]);
+        
+
+        return isLoading ? <Loader /> : error ? <Message variant="danger" />
     : (
         <>
         <h1>Order{order._id}</h1>
