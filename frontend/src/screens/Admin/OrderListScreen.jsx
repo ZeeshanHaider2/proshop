@@ -5,15 +5,22 @@ import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { useGetOrdersQuery } from '../../slices/ordersApiSlice';
 
+
+// ... (other import statements and code)
+
 const OrderListScreen = () => {
   const { data: orders, isLoading, error } = useGetOrdersQuery();
   console.log(orders);
-  return <>
-     <h1>Orders</h1>
-     {isLoading ? <Loader/> : error ? <Message variant='danger'>{error}
-     </Message> : (
-       <Table stripped  hover responsive className='table-sm'>
-         <thead>
+  return (
+    <>
+      <h1>Orders</h1>
+      {isLoading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <Table striped hover responsive className="table-sm">
+          <thead>
             <tr>
               <th>ID</th>
               <th>USER</th>
@@ -29,18 +36,20 @@ const OrderListScreen = () => {
               <tr key={order._id}>
                 <td>{order._id}</td>
                 <td>{order.user && order.user.name}</td>
-                <td>{order.createdAt.substring(0, 10)}</td>
+                <td>
+                  {order.createdAt && order.createdAt.substring(0, 10)}
+                </td>
                 <td>${order.totalPrice}</td>
                 <td>
                   {order.isPaid ? (
-                    order.paidAt.substring(0, 10)
+                    order.paidAt && order.paidAt.substring(0, 10)
                   ) : (
                     <FaTimes style={{ color: 'red' }} />
                   )}
                 </td>
                 <td>
                   {order.isDelivered ? (
-                    order.deliveredAt.substring(0, 10)
+                    order.deliveredAt && order.deliveredAt.substring(0, 10)
                   ) : (
                     <FaTimes style={{ color: 'red' }} />
                   )}
@@ -55,10 +64,10 @@ const OrderListScreen = () => {
               </tr>
             ))}
           </tbody>
-       </Table>
-     )}
-  </>
-  
-};
+        </Table>
+      )}
+    </>
+  );
+}
 
-export default OrderListScreen
+export default OrderListScreen;
