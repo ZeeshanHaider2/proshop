@@ -1,14 +1,14 @@
 import React from 'react'
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
-import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+//import { useParams } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 //import Paginate from '../../components/Paginate';
 import {
   useGetProductsQuery,
-  useDeleteProductMutation,
+  //useDeleteProductMutation,
   useCreateProductMutation,
 } from '../../slices/productsApiSlice';
 import { toast } from 'react-toastify';
