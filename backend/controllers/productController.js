@@ -69,4 +69,5 @@ const updateProduct = asyncHandler(async (req, res) => {
       throw new Error('Product not found');
     }
   });
+
 export { getProducts, getProductById, createProduct, updateProduct };
