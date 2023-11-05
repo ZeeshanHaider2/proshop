@@ -9,13 +9,13 @@ import Message from '../components/Message';
 const HomeScreen = () => {
 
   //const [ products, setProducts ] = useState([]);
-  //useEffect(() => {
+  // useEffect(() => {
   //const fetchProducts = async() => {
   //const { data } =  await axios.get('api/products');
   //setProducts(data);
   //};
   //fetchProducts();
-  //},[]);
+   //},[]);
 
   const { data:products, isLoading, error } = useGetProductsQuery();
 
