@@ -22,7 +22,7 @@ const ProductEditScreen = () => {
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
 
-  const { data:product, isLoading , error, refetch } = useGetProductDetailsQuery(productId);
+  const { data:product, isLoading , error  } = useGetProductDetailsQuery(productId);
   
    const [updateProduct, { isLoading:loadingUpdate}] = useUpdateProductMutation();
   
