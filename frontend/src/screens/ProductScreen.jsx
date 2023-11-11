@@ -5,13 +5,14 @@ import { Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap';
 import Rating from '../components/Rating';
 //import axios from 'axios';
-import { useGetProductDetailsQuery} from '../slices/productsApiSlice'
+import { useGetProductDetailsQuery, useCreateProductMutation} from '../slices/productsApiSlice'
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import {addToCart} from '../slices/cartSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 const ProductScreen = () => {
-  //const [ product, setProduct ] = useState({});
+  
 
     const {id: productId} = useParams();
     
@@ -20,18 +21,16 @@ const ProductScreen = () => {
 
     const [qty, setQty] = useState(1);
 
-    const { data:product, isLoading, error } = useGetProductDetailsQuery(productId);
+    const [ rating, setRating ] = useState(0);
+    const [ comment, setComment ] = useState('');
+
+    const { data:product, isLoading, error, refetch } = useGetProductDetailsQuery(productId);
     
+    const [ createReview, { isLoading: loadingProductReview}] = useCreateProductMutation();
+    
+    const { userInfo } = useSelector ((state) => state.auth);
 
-    //useEffect(() => {
-      //const fetchProduct = async () => {
-      //const { data } =  await axios.get(`/api/products/${productId}`);
-      //setProduct(data);
-      //}
-      //fetchProduct();
-      //},[productId]);
-
-  const addToCartHandler = () => {
+    const addToCartHandler = () => {
         dispatch(addToCart({...product, qty}));
         navigate('/cart');
       };
@@ -44,7 +43,9 @@ const ProductScreen = () => {
       <Loader/>
      ) : error ? (
       <Message variant = 'danger'>{error?.data?.message || error.error}</Message>
-     ) : (<Row>
+     ) : (
+        <>
+     <Row>
         <Col md={5}>
             <Image src={product.image} alt={product.name} fluid/>
         </Col>
@@ -118,10 +119,11 @@ const ProductScreen = () => {
                 </ListGroup>
         </Card>
         </Col>
-     </Row>) }
-     
+     </Row>
+        </>
+     )}
     </>
-  )
-}
+  );
+};
 
 export default ProductScreen
