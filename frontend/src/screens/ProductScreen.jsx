@@ -12,6 +12,7 @@ import {
   Form,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import Meta from '../components/Meta';
 import {
   useGetProductDetailsQuery,
   useCreateReviewMutation,
@@ -80,7 +81,7 @@ const ProductScreen = () => {
         </Message>
       ) : (
         <>
-          
+          <Meta title={product.name}/>
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
